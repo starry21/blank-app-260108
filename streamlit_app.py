@@ -1,178 +1,240 @@
-import streamlit as st
-import pandas as pd
-import numpy as np
-import altair as alt
-import matplotlib.pyplot as plt
-from datetime import datetime
+import streamlit as st  # Streamlit 라이브러리를 임포트합니다. 웹 앱을 만들기 위한 주요 도구입니다.
+import pandas as pd  # 데이터프레임을 다루기 위한 pandas 라이브러리
+import numpy as np  # 수학적 계산을 위한 numpy 라이브러리
+import altair as alt  # Altair 차트 라이브러리
+import matplotlib.pyplot as plt  # Matplotlib 차트 라이브러리
+from datetime import datetime  # 날짜와 시간을 다루기 위한 datetime 모듈
 
-# Streamlit 학습용 데모 페이지
-# 아래 예시는 "한 페이지"에 넣을 수 있는 주요 요소들을 모아놓은 샘플입니다.
-# 각 블록 위에 간단한 주석을 달아 공부에 도움이 되도록 했습니다.
+# 페이지 설정: 앱의 제목과 레이아웃을 설정합니다.
+st.set_page_config(page_title="Streamlit 요소 학습 페이지", layout="wide")
 
-st.set_page_config(page_title="Streamlit 요소 모음", layout="wide")
+# 메인 제목: 페이지의 주요 제목을 표시합니다.
+st.title("📚 Streamlit 단일 페이지 요소 모음")
 
-st.title("📚 Streamlit 요소 예제 모음")
-st.caption("이 페이지는 Streamlit의 주요 위젯, 레이아웃, 미디어, 차트, 상태 관리 등을 한데 모아 보여줍니다.")
+# 부제목: 페이지 설명을 추가합니다.
+st.caption("이 페이지는 Streamlit의 모든 주요 요소를 한 페이지에 모아 보여줍니다. 각 요소에 주석을 달아 학습에 도움이 되도록 했습니다.")
 
-# ---------------------------------------------
-# 텍스트와 마크다운
-# ---------------------------------------------
-st.header("텍스트 & 마크다운")
-st.write("일반 텍스트 출력: st.write()는 다양한 타입을 알아서 포맷합니다.")
-st.markdown("**Markdown 강조**: `st.markdown()` 으로 마크다운을 렌더링합니다.")
-st.latex(r"E = mc^2")  # 수식 렌더링 예시
-st.caption("위 코드는 수식 렌더링 예시입니다. 라텍스 문법을 사용합니다.")
+# 섹션 1: 텍스트 출력 요소들
+st.header("1. 텍스트 출력 요소들")
 
-# 코드 블록을 보여주는 방법
-code_example = '''import streamlit as st
-st.write("Hello Streamlit")
+# st.write: 다양한 타입의 데이터를 자동으로 포맷하여 출력합니다.
+st.write("st.write()는 텍스트, 숫자, 리스트 등 다양한 데이터를 출력할 수 있습니다.")
+
+# st.text: 일반 텍스트를 출력합니다. 마크다운을 지원하지 않습니다.
+st.text("st.text()는 일반 텍스트를 출력합니다. 마크다운이 적용되지 않습니다.")
+
+# st.markdown: 마크다운 문법을 사용하여 텍스트를 포맷합니다.
+st.markdown("**st.markdown()**은 *마크다운* 문법을 지원합니다. `코드`도 가능합니다.")
+
+# st.title: 큰 제목을 표시합니다.
+st.title("st.title() 예시")
+
+# st.header: 중간 크기의 제목을 표시합니다.
+st.header("st.header() 예시")
+
+# st.subheader: 작은 제목을 표시합니다.
+st.subheader("st.subheader() 예시")
+
+# st.caption: 작은 캡션 텍스트를 표시합니다.
+st.caption("st.caption()은 작은 설명 텍스트를 표시합니다.")
+
+# st.latex: LaTeX 수식을 렌더링합니다.
+st.latex(r"E = mc^2")  # 아인슈타인의 질량-에너지 등가 공식
+
+# st.code: 코드 블록을 하이라이팅하여 표시합니다.
+code_example = '''
+def hello():
+    print("Hello, Streamlit!")
 '''
-st.code(code_example, language='python')  # 코드 하이라이팅
+st.code(code_example, language='python')
 
-# ---------------------------------------------
-# 입력 위젯 예시
-# ---------------------------------------------
-st.header("입력 위젯")
-with st.expander("입력 폼(기본 위젯들)"):
-    # 간단한 입력 위젯 모음
-    name = st.text_input("이름 입력", value="홍길동")  # 한 줄 텍스트 입력
-    bio = st.text_area("간단 소개", value="Streamlit을 공부중입니다.")  # 여러 줄 입력
-    age = st.number_input("나이", min_value=0, max_value=150, value=30)  # 숫자 입력
-    date = st.date_input("오늘 날짜", value=datetime.today())  # 날짜 입력
-    time = st.time_input("시간 선택", value=datetime.now().time())  # 시간 입력
+# 섹션 2: 입력 위젯 요소들
+st.header("2. 입력 위젯 요소들")
 
-    # 선택형 위젯들
-    option = st.selectbox("옵션 선택", ["옵션 A", "옵션 B", "옵션 C"])  # 단일 선택
-    multi = st.multiselect("다중 선택", ["사과", "바나나", "체리"], default=["사과"])  # 다중 선택
-    agree = st.checkbox("약관 동의")  # 체크박스
-    radio = st.radio("라디오 버튼", ("오전", "오후", "저녁"))
-    rating = st.slider("만족도", 0.0, 5.0, 3.5)  # 슬라이더 (float)
+# st.text_input: 한 줄 텍스트 입력 필드를 만듭니다.
+name = st.text_input("이름을 입력하세요", value="홍길동")  # 기본값 설정 가능
 
-    # 버튼과 폼
-    if st.button("인사하기"):
-        st.success(f"안녕하세요, {name}님!")
+# st.text_area: 여러 줄 텍스트 입력 필드를 만듭니다.
+bio = st.text_area("자기소개를 입력하세요", value="Streamlit을 배우고 있습니다.")
 
-    with st.form(key='my_form'):
-        f_name = st.text_input('폼 - 이름')
-        f_submit = st.form_submit_button('폼 제출')
-        if f_submit:
-            st.info(f'폼 제출: {f_name}')
+# st.number_input: 숫자 입력 필드를 만듭니다.
+age = st.number_input("나이를 입력하세요", min_value=0, max_value=150, value=25)
 
-    # 주석: 위의 각 위젯은 사용자가 상호작용할 수 있고, 해당 변수에 값이 저장됩니다.
+# st.slider: 슬라이더를 사용하여 값을 선택합니다.
+rating = st.slider("만족도를 선택하세요", 0.0, 5.0, 3.5)
 
-# ---------------------------------------------
-# 파일 업로드 및 미디어
-# ---------------------------------------------
-st.header("미디어 & 파일 업로드")
-uploaded = st.file_uploader("파일 업로드 (이미지, CSV 등)")
-if uploaded is not None:
-    # 파일의 종류에 따라 처리할 수 있습니다. 예: CSV -> dataframe
-    try:
-        df_uploaded = pd.read_csv(uploaded)
-        st.write("업로드한 CSV 미리보기:")
-        st.dataframe(df_uploaded.head())
-    except Exception:
-        st.write("이미지나 기타 파일이 업로드되었습니다.")
+# st.selectbox: 드롭다운 메뉴에서 단일 옵션을 선택합니다.
+option = st.selectbox("옵션을 선택하세요", ["옵션 A", "옵션 B", "옵션 C"])
 
-img = st.file_uploader("이미지 업로드 (이미지 파일만 테스트)", type=["png", "jpg", "jpeg"])
-if img:
-    st.image(img, caption="업로드된 이미지", use_column_width=True)
+# st.multiselect: 여러 옵션을 선택할 수 있습니다.
+multi_options = st.multiselect("여러 옵션을 선택하세요", ["사과", "바나나", "체리"], default=["사과"])
 
-st.camera_input("카메라 입력 (브라우저에서 허용 필요)")
-st.audio(None)  # 빈 플레이어를 보여주는 예시 (실제로는 파일 제공)
-st.video(None)
+# st.radio: 라디오 버튼 그룹을 만듭니다.
+radio_choice = st.radio("시간대를 선택하세요", ("오전", "오후", "저녁"))
 
-# ---------------------------------------------
-# 데이터프레임 및 테이블
-# ---------------------------------------------
-st.header("데이터와 차트")
-@st.cache_data
-def make_sample_df(n=50):
-    # 캐시된 함수: 동일 입력이면 결과 재사용 (성능 개선)
-    x = np.linspace(0, 10, n)
-    df = pd.DataFrame({
-        'x': x,
-        'sin': np.sin(x),
-        'cos': np.cos(x),
-        'random': np.random.randn(n)
-    })
-    return df
+# st.checkbox: 체크박스를 만듭니다.
+agree = st.checkbox("약관에 동의합니다")
 
-df = make_sample_df()
-st.dataframe(df)  # 인터랙티브한 데이터프레임 뷰어
-st.table(df.head())  # 고정된 표
-st.json({'example': True, 'values': [1, 2, 3]})
+# st.button: 버튼을 만들고 클릭 이벤트를 처리합니다.
+if st.button("클릭하세요"):
+    st.success("버튼이 클릭되었습니다!")
 
-# 차트: 간단한 내장 차트
-st.subheader("내장 차트 (line/area/bar)")
-st.line_chart(df[['x', 'sin']].set_index('x'))
-st.area_chart(df[['x', 'cos']].set_index('x'))
-st.bar_chart(df[['random']])
+# st.form: 여러 입력을 그룹화하여 폼으로 만듭니다.
+with st.form("my_form"):
+    form_name = st.text_input("폼 이름")
+    form_age = st.number_input("폼 나이", min_value=0)
+    submitted = st.form_submit_button("제출")
+    if submitted:
+        st.info(f"제출됨: {form_name}, {form_age}세")
 
-# 차트: Altair 예시
-st.subheader("Altair 차트 예시")
-chart = alt.Chart(df).mark_line().encode(x='x', y='sin')
-st.altair_chart(chart, use_container_width=True)
+# st.date_input: 날짜를 선택합니다.
+selected_date = st.date_input("날짜를 선택하세요", value=datetime.today())
 
-# Matplotlib 예시
+# st.time_input: 시간을 선택합니다.
+selected_time = st.time_input("시간을 선택하세요", value=datetime.now().time())
+
+# st.file_uploader: 파일을 업로드합니다.
+uploaded_file = st.file_uploader("파일을 업로드하세요")
+
+# 섹션 3: 데이터 표시 요소들
+st.header("3. 데이터 표시 요소들")
+
+# 샘플 데이터프레임 생성
+sample_df = pd.DataFrame({
+    '이름': ['Alice', 'Bob', 'Charlie'],
+    '나이': [25, 30, 35],
+    '점수': [85, 90, 95]
+})
+
+# st.dataframe: 인터랙티브한 데이터프레임을 표시합니다.
+st.dataframe(sample_df)
+
+# st.table: 정적인 테이블을 표시합니다.
+st.table(sample_df)
+
+# st.json: JSON 데이터를 표시합니다.
+sample_json = {"이름": "Alice", "나이": 25, "점수": 85}
+st.json(sample_json)
+
+# st.metric: 메트릭(지표)을 표시합니다.
+st.metric("온도", "21°C", "+2°C")
+
+# 섹션 4: 차트 요소들
+st.header("4. 차트 요소들")
+
+# 샘플 차트 데이터
+chart_data = pd.DataFrame({
+    'x': np.linspace(0, 10, 50),
+    'y1': np.sin(np.linspace(0, 10, 50)),
+    'y2': np.cos(np.linspace(0, 10, 50))
+})
+
+# st.line_chart: 선 차트를 표시합니다.
+st.line_chart(chart_data.set_index('x'))
+
+# st.area_chart: 영역 차트를 표시합니다.
+st.area_chart(chart_data.set_index('x'))
+
+# st.bar_chart: 막대 차트를 표시합니다.
+bar_data = pd.DataFrame({'카테고리': ['A', 'B', 'C'], '값': [10, 20, 30]})
+st.bar_chart(bar_data.set_index('카테고리'))
+
+# st.altair_chart: Altair 차트를 표시합니다.
+altair_chart = alt.Chart(chart_data).mark_line().encode(x='x', y='y1')
+st.altair_chart(altair_chart, use_container_width=True)
+
+# st.pyplot: Matplotlib 차트를 표시합니다.
 fig, ax = plt.subplots()
-ax.plot(df['x'], df['sin'], label='sin')
-ax.plot(df['x'], df['cos'], label='cos')
+ax.plot(chart_data['x'], chart_data['y1'], label='sin')
+ax.plot(chart_data['x'], chart_data['y2'], label='cos')
 ax.legend()
 st.pyplot(fig)
 
-# ---------------------------------------------
-# 레이아웃: 컬럼, 익스팬더, 사이드바
-# ---------------------------------------------
-st.header("레이아웃 & 컨테이너")
-col1, col2, col3 = st.columns([1, 2, 1])  # 가변 너비 컬럼
+# 섹션 5: 레이아웃 요소들
+st.header("5. 레이아웃 요소들")
+
+# st.columns: 페이지를 여러 열로 나눕니다.
+col1, col2, col3 = st.columns(3)
 with col1:
-    st.metric("온도", "21°C", "+2°C")  # KPI 표시
+    st.write("첫 번째 열")
 with col2:
-    st.info("중앙 컬럼: 주요 콘텐츠 영역")
-    with st.expander("추가 정보 (Expander)"):
-        st.write("숨겨진 설명을 여기에 적습니다.")
+    st.write("두 번째 열")
 with col3:
-    st.warning("오른쪽 사이드바 느낌")
+    st.write("세 번째 열")
 
-st.sidebar.header("사이드바 예시")
-sb_choice = st.sidebar.selectbox("사이드바 선택", ["A", "B", "C"])
-st.sidebar.write("선택:", sb_choice)
+# st.expander: 접을 수 있는 섹션을 만듭니다.
+with st.expander("더 많은 정보 보기"):
+    st.write("여기에 추가 정보를 넣을 수 있습니다.")
 
-# ---------------------------------------------
-# 인터랙티브 상태와 캐시 예시
-# ---------------------------------------------
-st.header("상태 관리 & 캐시")
-if 'count' not in st.session_state:
-    st.session_state.count = 0
+# st.container: 컨테이너를 만들어 요소를 그룹화합니다.
+with st.container():
+    st.write("컨테이너 안의 내용")
+    st.button("컨테이너 안 버튼")
 
-if st.button('증가'):
-    st.session_state.count += 1
-st.write('현재 카운트:', st.session_state.count)
+# st.sidebar: 사이드바를 만듭니다.
+sidebar_option = st.sidebar.selectbox("사이드바 옵션", ["옵션 1", "옵션 2"])
+st.sidebar.write(f"선택된 옵션: {sidebar_option}")
 
+# 섹션 6: 미디어 요소들
+st.header("6. 미디어 요소들")
+
+# st.image: 이미지를 표시합니다.
+# 실제로는 이미지 파일 경로나 URL을 사용합니다.
+st.image("https://via.placeholder.com/300", caption="샘플 이미지")
+
+# st.audio: 오디오 파일을 재생합니다.
+# 실제로는 오디오 파일을 제공해야 합니다.
+# st.audio("sample_audio.mp3")
+
+# st.video: 비디오 파일을 재생합니다.
+# 실제로는 비디오 파일을 제공해야 합니다.
+# st.video("sample_video.mp4")
+
+# st.camera_input: 카메라 입력을 받습니다.
+camera_image = st.camera_input("카메라로 사진 찍기")
+
+# 섹션 7: 상태 및 기타 요소들
+st.header("7. 상태 및 기타 요소들")
+
+# 세션 상태: 앱의 상태를 유지합니다.
+if 'counter' not in st.session_state:
+    st.session_state.counter = 0
+
+if st.button("카운터 증가"):
+    st.session_state.counter += 1
+st.write(f"카운터 값: {st.session_state.counter}")
+
+# 캐시: 계산 결과를 캐시하여 성능을 향상시킵니다.
 @st.cache_data
-def expensive_computation(x):
-    # 실제 무거운 작업 대신 sleep을 쓰지 않습니다. 복잡한 연산을 가정.
-    return x * x
+def expensive_calculation(x):
+    # 실제로는 무거운 계산을 수행합니다.
+    return x ** 2
 
-result = expensive_computation(10)
-st.write('캐시된 계산 결과 예시:', result)
+cached_result = expensive_calculation(10)
+st.write(f"캐시된 계산 결과: {cached_result}")
 
-# ---------------------------------------------
-# 상태 메시지와 알림
-# ---------------------------------------------
-st.header("알림 & 진행 상태")
-with st.spinner('처리중...'):
+# 진행 상태 표시
+progress_bar = st.progress(0)
+for i in range(100):
+    progress_bar.progress(i + 1)
+
+# 스피너: 작업 중임을 표시합니다.
+with st.spinner("작업 중..."):
+    # 실제 작업을 수행합니다.
     pass
-st.success('성공 메시지 예시')
-st.info('정보 메시지 예시')
-st.warning('경고 메시지 예시')
-st.error('오류 메시지 예시')
 
-# ---------------------------------------------
-# 마무리 안내
-# ---------------------------------------------
+# 알림 메시지들
+st.success("성공 메시지")
+st.info("정보 메시지")
+st.warning("경고 메시지")
+st.error("오류 메시지")
+
+# 빈 요소: 레이아웃을 위한 빈 공간
+st.empty()
+
+# 구분선
 st.markdown("---")
-st.write("이 페이지는 학습용 예시입니다. 각 위젯 옆의 코드를 참고해 직접 수정해보세요.")
-st.caption("원하시면 이 파일을 더 확장하거나, 특정 위젯의 심화 예제를 추가해 드립니다.")
+
+# 마무리
+st.write("이 페이지에는 Streamlit의 주요 요소들이 모두 포함되어 있습니다. 각 요소의 코드를 참고하여 학습하세요!")
 
