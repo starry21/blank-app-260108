@@ -141,7 +141,7 @@ st.bar_chart(bar_data.set_index('카테고리'))
 
 # st.altair_chart: Altair 차트를 표시합니다.
 altair_chart = alt.Chart(chart_data).mark_line().encode(x='x', y='y1')
-st.altair_chart(altair_chart, use_container_width=True)
+st.altair_chart(altair_chart, width='stretch')
 
 # st.pyplot: Matplotlib 차트를 표시합니다.
 fig, ax = plt.subplots()
